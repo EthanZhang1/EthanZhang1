@@ -1,0 +1,69 @@
+ <kt-portlet-body>
+        <div class="mat-table__wrapper">
+            <mat-table class="lmat-elevation-z8" #table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="transactionId">
+                    <mat-header-cell *matHeaderCellDef>Transaction ID</mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">{{deposit.transactionUniqueId }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="bankTransactionId">
+                    <mat-header-cell *matHeaderCellDef>Bank Transaction ID</mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">{{deposit.bankTransactionUniqueId | uppercase}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="customerId">
+                    <mat-header-cell *matHeaderCellDef>Customer ID</mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">{{deposit.masterLoan.customer.customerUniqueId | uppercase}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="loanId">
+                    <mat-header-cell *matHeaderCellDef>Loan ID</mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">
+                        <div class="loanID">
+                            <span *ngFor="let item of deposit.masterLoan.customerLoan">
+                                {{ item.loanUniqueId | uppercase }}
+                            </span>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+             
+                <ng-container matColumnDef="depositStatus">
+                    <mat-header-cell *matHeaderCellDef>Deposit Status</mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">
+                        <span
+                            [ngClass]="deposit.depositStatus  == 'Pending' ? 'text-warning' :deposit.depositStatus == 'Completed' ? 'text-success' : 'text-danger' ">
+                            {{deposit.depositStatus | titlecase}}
+                        </span>
+                    </mat-cell>
+
+                </ng-container>
+
+                <ng-container matColumnDef="update">
+                    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                    <mat-cell *matCellDef="let deposit">
+                        <div *ngxPermissionsOnly="['approveDeposit']">
+                            <button
+                                *ngIf="deposit.depositStatus == 'Pending' && (deposit.paymentFor != 'partRelease' && deposit.paymentFor != 'fullRelease')"
+                                style="width: 120px;" class="apply-kyc" (click)="updateStatus(deposit)">Edit
+                            </button>
+                        </div>
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+            </mat-table>
+            <div class="mat-table__message" *ngIf="!dataSource.hasItems">No records found</div>
+            <div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Please wait....</div>
+        </div>
+        <div class="mat-table__bottom">
+            <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+            <mat-paginator [pageSize]="25" [pageSizeOptions]="[25,50,100,150]"
+                [length]="dataSource.paginatorTotal$ | async" [showFirstLastButtons]="true"></mat-paginator>
+        </div>
+    </kt-portlet-body>

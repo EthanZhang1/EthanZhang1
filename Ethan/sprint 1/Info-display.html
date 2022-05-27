@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/style.css') }}">
+    <title>Homepage</title>
+    <script src="../static/js/jquery-3.1.0.js"></script>
+
+</head>
+<body>
+<header>
+    <nav class="log">
+        <ul>
+            <li><a href="search/{{ userid }}">Search</a></li>
+            <li><a href="addtopic/{{ userid }}">Addtopic</a></li>
+        </ul>
+    </nav>
+    <a> <h1 class="logo">WeForum</h1></a>
+
+</header>
+    <ul>
+        <ur>
+
+            {% for topic in topics %}
+                <section class="braket1">
+                    <section class="topic">
+                    <p id="btn_show" class="top{{ topic.id }}"><b>{{ topic.title }}</b><B>←Click to view claims</B></p>
+                    <p class="tag">{{ topic.author.username }}/{{ topic.timestamp }}</p>
+                    </section>
+                    <section class="braket2">
+                    <div id="{{ topic.id }}" style="display: none">
+                    {% for claim in topic.claim %}
+                        <p onclick="javascript:window.location.href='{{ userid }}/post/{{ claim.id }}'" class="header">{{ claim.headermessage }}<B>←Click to view replies</B></p>
+                        <p class="header">{{ claim.author.username }}</p>
+                        <P class="time">{{ claim.timestamp }}</P>
+                        <p class="content">{{ claim.content }}</p>
+                        <HR align=center width=300color=#987cb9 SIZE=5>
+                    {% endfor %}
+                    <button class="close{{ topic.id }}">close</button>
+                    <button class="NewClaimbtn" onclick="javascript:window.location.href='{{ userid }}/addClaim/{{ topic.id }}'">New Claim</button>
+                    </div>
+                </section>
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $(".top{{ topic.id }}").on('click',function () {
+                            $("#{{ topic.id }}").fadeIn();
+                        });
+                        $(".close{{ topic.id }}").on('click',function(){
+                            $("#{{ topic.id }}").hide();
+                     })
+                    });
+                </script>
+                <style>
+                    .top{{ topic.id }}{
+                        color: #FFFFFF;
+                        display: block;
+                        font-size: 20px;
+                        margin-block-start: 10px;
+                        margin-block-end: 9px;
+                        margin-inline-start: 20px;
+                        margin-inline-end: 0px;
+                        font-family: Arial;
+                        cursor: pointer;
+                        }
+                    .top{{ topic.id }} :hover{
+                        color: #2C9AB7;
+                    }
+                    .close{{ topic.id }}{
+                        cursor: pointer;
+                        width: 70px;
+                        height: 30px;
+                        background: #52bad5;
+                        color: #FFFFFF;
+                        border-radius: 6px;
+                        margin: 20px auto;
+                        margin-left: 60px;
+                        }
+                </style>
+                </section>
+            {% endfor %}
+            </ur>
+    </ul>
+
+
+</body>
+</html>

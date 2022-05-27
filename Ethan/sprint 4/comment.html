@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Claim with its replies</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/style.css') }}">
+</head>
+<body>
+<header>
+    <nav class="log">
+        <ul>
+            <li onclick="location='http://127.0.0.1:5000/homepage/{{ userid }}'"><a>Back</a></li>
+        </ul>
+    </nav>
+    <a onclick="location='http://127.0.0.1:5000/homepage/{{ userid }}'"> <h1 class="logo">WeForum</h1></a>
+</header>
+    <button class="reply1" onclick="javascript:window.location.href='/homepage/{{ userid }}/post/{{ claimid }}/reply/'">Reply to this point</button>
+    <ul>
+        {% for claim in claims %}
+            <ur>
+            <section class="braket1">
+                <p class="header"><B>{{ claim.headermessage }}</B></p>
+                <p class="time">{{ claim.timestamp }}</p>
+                <p class="content">{{ claim.author.username }}<b>:{{ claim.content }}</b></p>
+            </section>
+
+                {% for i in claim.reply %}
+                    <section class="braket2">
+                        <p class="header">{{ i.author.username }}</p>
+                        <p class="time">{{ i.timestamp }}</p>
+                        <p class="content">{{ i.content }}</p>
+                        <button class="reply2" onclick="javascript:window.location.href='/homepage/{{ userid }}/post/{{ claimid }}/reply/reprep/{{ i.id }}'" >Reply</button>
+                        <section class="braket3">
+                        {% for m in i.oreply %}
+                        <P><B>{{ m.author.username }}</B></P>
+                        <P><B><I>{{ m.timestamp }}</I></B></P>
+                        <P>{{ m.content }}</P>
+                        {% endfor %}
+                        <HR align=left width=300color=#987cb9 SIZE=5>
+                    </section>
+                    </section>
+<HR align=left width=300color=#987cb9 SIZE=5>
+
+
+                {% endfor %}
+            </ur>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

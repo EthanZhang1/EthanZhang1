@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New claim</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/style.css') }}">
+</head>
+<body>
+<form method="post" class="addClaim">
+    {{ form.csrf_token }}
+    {{ form.headermessage.label}}
+    <P>{{ form.headermessage}}</P>
+    {% for msg in form.headermessage.errors %}
+        <p>{{ msg }}</p>
+    {% endfor %}
+
+    {{ form.csrf_token }}
+    {{ form.claim.label}}
+    <P>{{ form.claim}}</P>
+    {% for msg in form.claim.errors %}
+        <p>{{ msg }}</p>
+    {% endfor %}
+    {{ form.submit }}
+</form>
+
+</body>
+</html>

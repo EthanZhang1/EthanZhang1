@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/style.css') }}">
+    <title>Search topic</title>
+    <script src="../static/js/jquery-3.1.0.min.js"></script>
+</head>
+<body>
+<header>
+    <nav class="log">
+        <ul>
+            <li onclick="location='http://127.0.0.1:5000/homepage/{{ userid }}'"><a>Back</a></li>
+        </ul>
+    </nav>
+    <a href="http://127.0.0.1:5000/homepage/{{ userid }}" style="text-decoration: none"> <h1 class="logo">WDNMD</h1></a>
+
+</header>
+<form method="post">
+    <input class="searchbar" type="text" name="content" id="content" placeholder="Enter some detail of topic.">
+
+    <input type="submit" value="Search" class="NewClaimbtn">
+</form>
+
+{% for i in search_results %}
+    <section class="topic">
+    <p class="top{{ i.id }}"><b>{{ i.title }}</b></p>
+    <p class="tag">{{ i.author.username }}/{{ i.timestamp }}</p>
+    </section>
+    <section class="braket2">
+    <div id="{{ i.id }}">
+        {% for m in i.claim %}
+        <section class="braket2">
+            <p class="header" onclick="javascript:window.location.href='http://127.0.0.1:5000/homepage/{{ userid }}/post/{{ m.id }}'">{{ m.headermessage }}</p>
+            <p class="header">{{ m.author.username }}</p>
+            <p class="time">{{  m.timestamp  }}</p>
+            <p class="content">{{ m.content }}</p>
+            <HR align=center width=300color=#987cb9 SIZE=5>
+        </section>
+        {% endfor %}
+        <button class="close{{ i.id }}">close</button>
+        <button class="NewClaimbtn" onclick="javascript:window.location.href='http://127.0.0.1:5000/homepage/{{ userid }}/addClaim/{{ i.id }}'">New Claim</button>
+    </div>
+
+
+        <script type="text/javascript">
+                    $(document).ready(function(){
+                        $(".top{{ i.id }}").on('click',function () {
+                            $("#{{ i.id }}").fadeIn();
+                        });
+                        $(".close{{ i.id }}").on('click',function(){
+                            $("#{{ i.id }}").hide();
+                     })
+                    });
+                </script>
+        <style>
+                    .top{{ i.id }}{
+                        color: #FFFFFF;
+                        display: block;
+                        font-size: 20px;
+                        margin-block-start: 10px;
+                        margin-block-end: 9px;
+                        margin-inline-start: 20px;
+                        margin-inline-end: 0px;
+                        font-family: Arial;
+                        cursor: pointer;
+                        }
+                    .top{{ i.id }} :hover{
+                        color: #2C9AB7;
+                    }
+                    .close{{ i.id }}{
+                        cursor: pointer;
+                        width: 70px;
+                        height: 30px;
+                        background: #52bad5;
+                        color: #FFFFFF;
+                        border-radius: 6px;
+                        margin: 20px auto;
+                        margin-left: 60px;
+                        }
+                </style>
+    </section>
+{% endfor %}
+
+</body>
+</html>
